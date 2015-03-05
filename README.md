@@ -2,9 +2,8 @@
 
 ## 실행
 ```
-npm install -g http-server
-
 git clone https://github.com/rotoshine/jjalbang-maker.git
 cd jjalbang-maker
-http-server
+npm install && bower install
+node app.js
 ```

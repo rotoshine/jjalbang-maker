@@ -1,0 +1,22 @@
+{
+  "name": "jjalbang_maker",
+  "version": "0.0.1",
+  "description": "심심해서 만들었다.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rotoshine/jjalbang-maker.git"
+  },
+  "author": "rotoshine@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rotoshine/jjalbang-maker/issues"
+  },
+  "homepage": "https://github.com/rotoshine/jjalbang-maker",
+  "dependencies": {
+    "express": "^4.12.2"
+  }
+}
