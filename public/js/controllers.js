@@ -49,7 +49,11 @@ angular
             $('.cut').css('font-size', fontSize + 'px');
         };
 
-        $scope.generate = function(){
-            imageService.generate($scope.source, backgroundImage, $scope.selectedFontSize);
+        $scope.generate = function($event){
+            var data = imageService.generate($scope.source, backgroundImage, $scope.selectedFontSize);
+            var target = $event.target;
+
+            target.download = '짤생성_결과.jpg';
+            target.href = data;
         }
     });

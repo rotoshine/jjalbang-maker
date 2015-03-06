@@ -25,6 +25,8 @@ angular
                         }
                     }
                 }
+
+                return canvas.toDataURL('image/png');
             }
         };
     }).service('sourceService', function(){
