@@ -5,6 +5,12 @@ angular
         $stateProvider
             .state('source', {
                 url: '/source/:id',
-                templateUrl: 'source.html'
+                templateUrl: 'source.html',
+                controller: 'SourceController'
+            })
+            .state('source extract', {
+                url: '/source-extract',
+                templateUrl: 'source-extract.html',
+                controller: 'SourceExtractController'
             });
     });

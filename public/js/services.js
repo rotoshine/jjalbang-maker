@@ -17,8 +17,9 @@ angular
 
                     if(cut.text !== undefined && typeof cut.text === 'string'){
                         // 왠지 모르겠는데 x랑 y가 묘하게 어긋남...보정하자..
+                        // FIXME 처음에 한 개행을 무시하는 버그가 있다. 고치다.
                         texts = cut.text.split('\n');
-                        currentCutY = cut.y + 13;
+                        currentCutY = cut.y + fontSize + 1;
                         for(j = 0; j < texts.length; j++){
                             context.fillText(texts[j], cut.x + 2, currentCutY);
                             currentCutY = currentCutY + 13;
@@ -134,11 +135,25 @@ angular
                     {
                         x: 34,
                         y: 472,
-                        widht: 116,
+                        width: 116,
                         height: 112
                     }
                 ]
-
+            },
+            {
+                id: 3,
+                name: '도라에몽',
+                imageUrl: 'images/도라에몽.jpg',
+                width: 700,
+                height: 498,
+                cuts: [
+                    {
+                        x:89.5,
+                        y:14,
+                        width:539,
+                        height:241
+                    }
+                ]
             }
         ];
 

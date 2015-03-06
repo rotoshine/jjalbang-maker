@@ -25,26 +25,47 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li ng-repeat="source in sources" ng-class="{active: isActive(source.id)}">
+                    <li ng-repeat="source in sources" ng-class="{active: isActive('/source/' + source.id)}">
                         <a ng-href="/source/{{source.id}}">{{source.name}}</a>
+                    </li>
+                    <li ng-class="{active: isActive('/source-extract')}">
+                        <a ng-href="/source-extract">소스 생성</a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
 	<div class="container">
-        <div class="row">
-            <ul>
-                <li>생성을 눌러도 이미지 저장이 안 뜨는 경우 아래 생성된 이미지를 우클릭 - 저장하십시오.</li>
-                <li>줄바꿈은 엔터로 해야 생성되는 이미지에서도 제대로 됩니다.</li>
-                <li>구글 크롬에 최적화 되어 있습니다.</li>
-                <li>문의는 <a href="https://facebook.com/rotoshine" target="_blank">https://facebook.com/rotoshine</a></li>
-            </ul>
-        </div>
         <div ui-view=""></div>
 	</div>
+    <script type="text/ng-template" id="source-extract.html">
+        <div ng-init="init()">
+            <div class="row">
+                <label for="local-image-file">파일 선택</label>
+                <input id="local-image-file" type="file" accept="image/*"/>
+                <div class="edit-layer">
+                    <canvas id="loaded-image"></canvas>
+                    <div ng-repeat="cut in cuts" class="cut-edit" ng-style="getStyle(cut)" ng-click="removeCut($index)"></div>
+                </div>
+            </div>
+            <div class="row">
+                <h3>추출된 데이터</h3>
+                <pre>
+{{source | json}}
+                </pre>
+            </div>
+        </div>
+    </script>
     <script type="text/ng-template" id="source.html">
-        <div ng-controller="SourceController" ng-init="init()">
+        <div ng-init="init()">
+            <div class="row">
+                <ul>
+                    <li>생성을 눌러도 이미지 저장이 안 뜨는 경우 아래 생성된 이미지를 우클릭 - 저장하십시오.</li>
+                    <li>줄바꿈은 엔터로 해야 생성되는 이미지에서도 제대로 됩니다.</li>
+                    <li>구글 크롬에 최적화 되어 있습니다.</li>
+                    <li>문의는 <a href="https://facebook.com/rotoshine" target="_blank">https://facebook.com/rotoshine</a></li>
+                </ul>
+            </div>
             <div class="row">
                 <span>
                     <label for="font-size">글자크기</label>
