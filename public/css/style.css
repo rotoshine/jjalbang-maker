@@ -1,14 +1,12 @@
 .edit-layer{
 	position:relative;
-	width: 554px;
-	height: 625px;
 }
-.ment{
+.cut{
 	position: absolute;
 	background-color:#ffffff;
 	border:none;
 	font-family: '굴림';
-	font-size:12px;			
+	font-size:12px;
 }
 .hide{
 	display:none;
