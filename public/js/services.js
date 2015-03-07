@@ -17,7 +17,7 @@ angular
 
                     if(cut.text !== undefined && typeof cut.text === 'string'){
                         // 왠지 모르겠는데 x랑 y가 묘하게 어긋남...보정하자..
-                        // FIXME 처음에 한 개행을 무시하는 버그가 있다. 고치다.
+                        // FIXME 처음에 한 개행을 무시하는 버그가 있다. 고치자.
                         texts = cut.text.split('\n');
                         currentCutY = cut.y + fontSize + 1;
                         for(j = 0; j < texts.length; j++){
@@ -100,7 +100,7 @@ angular
             {
                 id: 2,
                 name: '설명충',
-                imageUrl: 'images/description_bug.jpg',
+                imageUrl: '/images/description_bug.jpg',
                 width: 639,
                 height: 986,
                 cuts: [
@@ -143,7 +143,7 @@ angular
             {
                 id: 3,
                 name: '도라에몽',
-                imageUrl: 'images/도라에몽.jpg',
+                imageUrl: '/images/도라에몽.jpg',
                 width: 700,
                 height: 498,
                 cuts: [
@@ -153,6 +153,33 @@ angular
                         width:539,
                         height:241
                     }
+                ]
+            },
+            {
+                id: 4,
+                name: '그거해봐',
+                imageUrl: '/images/doThat.png',
+                width: 588,
+                height: 846,
+                cuts: [
+                    {
+                        x: 13.5,
+                        y: 18,
+                        width: 66,
+                        height: 178
+                    },
+                    {
+                        x: 12.5,
+                        y: 552,
+                        width: 257,
+                        height: 37
+                    },
+                    {
+                        x: 15.5,
+                        y: 788,
+                        width: 255,
+                        height: 33
+                    }                   
                 ]
             }
         ];

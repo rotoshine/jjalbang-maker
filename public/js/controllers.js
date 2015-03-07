@@ -138,11 +138,12 @@ angular
         $scope.selectedFontSize = DEFAULT_FONT_SIZE;
 
         $scope.init = function(){
-            console.log(parseInt($stateParams.id));
             $scope.source = sourceService.findById(parseInt($stateParams.id));
 
             backgroundImage = new Image();
             backgroundImage.src = $scope.source.imageUrl;
+
+            console.log($scope.source);
 
             backgroundImage.addEventListener('load', function(){
                 var canvas = document.getElementById('background');
