@@ -125,6 +125,29 @@ angular
     .controller('SourceController', function($scope, $stateParams, sourceService, imageService, DEFAULT_FONT_SIZE){
         $scope.source = null;
         var backgroundImage = null;
+        var i;
+
+        $scope.fonts = [
+            {
+                name: '굴림',
+                cssValue: '굴림'
+            },
+            {
+                name: '나눔고딕',
+                cssValue: 'Nanum Gothic',
+                importUrl: 'http://fonts.googleapis.com/earlyaccess/nanumgothic.css'
+            },
+            {
+                name: '나눔 브러시 스크립트',
+                cssValue:'Nanum Brush Script',
+                importUrl: 'http://fonts.googleapis.com/earlyaccess/nanumbrushscript.css'
+            },
+            {
+                name: '제주 한라산',
+                cssValue: 'Jeju Hallasan',
+                importUrl: 'http://fonts.googleapis.com/earlyaccess/jejuhallasan.css'
+            }
+        ];
 
         $scope.fontSizes = [
             10,
@@ -135,6 +158,7 @@ angular
             40
         ];
 
+        $scope.selectedFont = '굴림';
         $scope.selectedFontSize = DEFAULT_FONT_SIZE;
 
         $scope.init = function(){
@@ -151,6 +175,33 @@ angular
 
                 context.drawImage(backgroundImage, 0, 0);
             });
+
+            // webFont Load
+            var webFontFamilies = []
+            var webFontUrls = [];
+            for(i = 0; i < $scope.fonts.length; i++){
+                if($scope.fonts[i].importUrl){
+                    webFontFamilies.push($scope.fonts[i].cssValue);
+                    webFontUrls.push($scope.fonts[i].importUrl);
+                }
+            }
+
+            window.WebFont.load({
+                custom: {
+                    families: webFontFamilies,
+                    urls: webFontUrls
+                }
+            });
+
+            // ng-options로 생성된 font의 font를 변경
+            setTimeout(function(){
+                for(var i = 0; i < $scope.fonts.length; i++){
+                    var $option = $('#font').find('option:eq(' + i + ')');
+                    $option.css('font-family', $scope.fonts[i].cssValue);
+                    console.log($option);
+                }
+            }, 0);
+
         };
 
         $scope.getStyle = function(cut){
@@ -163,12 +214,20 @@ angular
             };
         };
 
+        function applyCutStyle(cssName, value){
+            $('.cut').css(cssName, value);
+        }
         $scope.applyFontSize = function(fontSize){
-            $('.cut').css('font-size', fontSize + 'px');
+            applyCutStyle('font-size', fontSize + 'px');
+        };
+
+        $scope.applyFont = function(font){
+            console.log(font);
+            applyCutStyle('font-family', font);
         };
 
         $scope.generate = function($event){
-            var data = imageService.generate($scope.source, backgroundImage, $scope.selectedFontSize);
+            var data = imageService.generate($scope.source, backgroundImage, $scope.selectedFont, $scope.selectedFontSize);
             var target = $event.target;
 
             target.download = '짤생성_결과.jpg';

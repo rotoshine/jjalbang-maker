@@ -3,26 +3,33 @@ angular
     .module('JBMaker')
     .service('imageService', function(){
         return {
-            generate: function(source, backgroundImage, fontSize){
+            generate: function(source, backgroundImage, font, fontSize){
                 var canvas = document.getElementById('result');
                 var context = canvas.getContext('2d');
 
                 var i, j, cut, currentCutY, texts;
 
-                context.drawImage(backgroundImage, 0, 0);
-                context.font = fontSize + 'px 굴림';
+                var LINE_HEIGHT_RATIO = 1.42857151;
+                var lineHeight = fontSize * LINE_HEIGHT_RATIO;
 
-                for(i = 0; i < source.cuts.length; i++){
-                    cut = source.cuts[i];
+                console.log(lineHeight);
+                context.drawImage(backgroundImage, 0, 0);
+                context.font = fontSize + 'px ' + font;
+
+                var cuts = source.cuts;
+
+                for(i = 0; i < cuts.length; i++){
+                    cut = cuts[i];
 
                     if(cut.text !== undefined && typeof cut.text === 'string'){
                         // 왠지 모르겠는데 x랑 y가 묘하게 어긋남...보정하자..
-                        // FIXME 처음에 한 개행을 무시하는 버그가 있다. 고치자.
                         texts = cut.text.split('\n');
-                        currentCutY = cut.y + fontSize + 1;
+                        currentCutY = cut.y + fontSize;
+                        console.log('currentCutY:' + currentCutY);
                         for(j = 0; j < texts.length; j++){
                             context.fillText(texts[j], cut.x + 2, currentCutY);
-                            currentCutY = currentCutY + 13;
+                            currentCutY = currentCutY + lineHeight;
+                            console.log('next rendering y :' + currentCutY);
                         }
                     }
                 }

@@ -73,6 +73,12 @@
                             ng-options="fontSize as fontSize for fontSize in fontSizes"
                             ng-change="applyFontSize(selectedFontSize)"></select>
                 </span>
+                <span>
+                    <label for="font">글꼴</label>
+                    <select id="font" ng-model="selectedFont"
+                            ng-options="font.cssValue as font.name for font in fonts"
+                            ng-change="applyFont(selectedFont)"></select>
+                </span>
                 <span class="buttons">
                     <a id="generate-image" class="btn btn-primary" href="#" ng-click="generate($event)">생성</a>
                 </span>
@@ -82,7 +88,8 @@
                     <canvas id="background" width="{{source.width}}" height="{{source.height}}"></canvas>
                     <textarea class="cut" ng-repeat="cut in source.cuts" placeholder="대사를 입력하세요."
                               ng-style="getStyle(cut)"
-                              ng-model="cut.text"></textarea>
+                              ng-model="cut.text"
+                              ng-trim="false"></textarea>
                 </div>
             </div>
             <div class="row">
@@ -100,6 +107,8 @@
         ga('send', 'pageview');
 
     </script>
+    <!-- TODO browseify로 뺼 것 -->
+    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.4.10/webfont.js"></script>
     <script src="/js/bundle.js"></script>
 </body>
 </html>
