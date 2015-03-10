@@ -188,6 +188,33 @@ angular
                         height: 33
                     }                   
                 ]
+            },
+            {
+                id: 5,
+                name: '이게 ~도 없는게',
+                imageUrl: '/images/이게.jpg',
+                cuts: [
+                    {
+                        x: 112.5,
+                        y: 250,
+                        width: 381,
+                        height: 43
+                    },
+                    {
+                        x: 104.5,
+                        y: 517,
+                        width: 396,
+                        height: 72
+                    },
+                    {
+                        x: 104.5,
+                        y: 889,
+                        width: 397,
+                        height: 66
+                    }
+                ],
+                width: 599,
+                height: 1008
             }
         ];
 
