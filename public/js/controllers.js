@@ -99,7 +99,7 @@ angular
             })
             .on('mouseup', function(event){
                 console.log('mouse up!');
-                var isMouseDown = false;
+                isMouseDown = false;
                 var dragEndPoint = getMousePosition(event);
                 clearImage();
 
@@ -109,7 +109,7 @@ angular
                 console.log(width);
                 console.log(height);
 
-                if(width > 30 && height > 30){
+                if(width > 30 && height > 20){
                     $scope.addCuts({
                         x: dragStartPoint.x,
                         y: dragStartPoint.y,
@@ -146,6 +146,11 @@ angular
                 name: '제주 한라산',
                 cssValue: 'Jeju Hallasan',
                 importUrl: 'http://fonts.googleapis.com/earlyaccess/jejuhallasan.css'
+            },
+            {
+                name: '코펍 바탕체',
+                cssValue: 'KoPub Batang',
+                importUrl: 'http://fonts.googleapis.com/earlyaccess/kopubbatang.css'
             }
         ];
 
@@ -177,7 +182,7 @@ angular
             });
 
             // webFont Load
-            var webFontFamilies = []
+            var webFontFamilies = [];
             var webFontUrls = [];
             for(i = 0; i < $scope.fonts.length; i++){
                 if($scope.fonts[i].importUrl){
@@ -186,12 +191,16 @@ angular
                 }
             }
 
-            window.WebFont.load({
-                custom: {
-                    families: webFontFamilies,
-                    urls: webFontUrls
-                }
-            });
+            if(window.hasOwnProperty('WebFont')){
+                window.WebFont.load({
+                    custom: {
+                        families: webFontFamilies,
+                        urls: webFontUrls
+                    }
+                });
+            }else{
+                throw new Error('WebFont lib not loaded!');
+            }
 
             // ng-options로 생성된 font의 font를 변경
             setTimeout(function(){
@@ -201,7 +210,6 @@ angular
                     console.log($option);
                 }
             }, 0);
-
         };
 
         $scope.getStyle = function(cut){
@@ -210,7 +218,9 @@ angular
                 'left': cut.x + MEASURE,
                 'top': cut.y + MEASURE,
                 'width': cut.width + MEASURE,
-                'height': cut.height + MEASURE
+                'height': cut.height + MEASURE,
+                'background-color': $scope.source.cutBackgroundColor || '#FFFFFF',
+                'color': $scope.source.fontColor || '#000000'
             };
         };
 

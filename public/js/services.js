@@ -16,6 +16,10 @@ angular
                 context.drawImage(backgroundImage, 0, 0);
                 context.font = fontSize + 'px ' + font;
 
+                if(source.hasOwnProperty('fontColor')){
+                    context.fillStyle = source.fontColor;
+                }
+
                 var cuts = source.cuts;
 
                 for(i = 0; i < cuts.length; i++){
@@ -215,6 +219,29 @@ angular
                 ],
                 width: 599,
                 height: 1008
+            },
+            {
+                id: 6,
+                name: 'Civil War',
+                imageUrl: '/images/시빌워.jpg',
+                fontColor: '#FFFFFF',
+                cutBackgroundColor: '#000000',
+                cuts: [
+                    {
+                        x: 80.5,
+                        y: 222,
+                        width: 306,
+                        height: 31
+                    },
+                    {
+                        x: 75.5,
+                        y: 477,
+                        width: 300,
+                        height: 27
+                    }
+                ],
+                width: 447,
+                height: 960
             }
         ];
 
