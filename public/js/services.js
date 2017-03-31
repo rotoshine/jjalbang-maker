@@ -224,16 +224,24 @@ angular
       id: 6,
       name: 'Civil War',
       imageUrl: '/images/시빌워.jpg',
+      fontColor: '#FFFFFF',
+      cutBackgroundColor: '#000000',
       cuts: [
         {
-          x: 332.5,
-          y: 12,
-          width: 35,
-          height: 103
+          x: 80.5,
+          y: 222,
+          width: 306,
+          height: 31
+        },
+        {
+          x: 75.5,
+          y: 477,
+          width: 300,
+          height: 27
         }
       ],
-      width: 390,
-      height: 480
+      width: 447,
+      height: 960
     },
     {
       id: 7,
