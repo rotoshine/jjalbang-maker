@@ -213,6 +213,21 @@ const sources = [
     ],
     width: 390,
     height: 480
+  },
+  {
+    id: 8,
+    name: '~하고싶다',
+    imageUrl: '/static/images/8.jpg',
+    cuts: [
+      {
+        x: 126,
+        y: 346,
+        width: 63,
+        height: 110
+      }
+    ],
+    width: 320,
+    height: 480
   }
 ];
 
