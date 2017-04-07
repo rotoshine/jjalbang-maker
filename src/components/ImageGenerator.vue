@@ -62,38 +62,34 @@
         s.id === parseInt(this.$route.params.sourceId, 10)
       );
 
-      const data = {
+      return {
         backgroundImage: null,
         selectedFont: fonts[0],
         selectedFontSize: fontSizes[0],
         source,
         fonts,
-        fontSizes
+        fontSizes,
+        editLayerStyle: {
+          width: `${source.width}px`,
+          height: `${source.height}px`
+        },
+        canvasStyle: {
+          width: source.width,
+          height: source.height
+        }
       };
-
-      data.editLayerStyle = {
-        width: `${source.width}px`,
-        height: `${source.height}px`
-      };
-
-      data.canvasStyle = {
-        width: source.width,
-        height: source.height
-      };
-
-      return data;
     },
     methods: {
       loadWebFonts() {
         const webFontFamilies = [];
         const webFontUrls = [];
 
-        for (let i = 0; i < this.fonts.length; i += 1) {
-          if (this.fonts[i].importUrl) {
-            webFontFamilies.push(this.fonts[i].cssValue);
-            webFontUrls.push(this.fonts[i].importUrl);
+        this.fonts.forEach((font) => {
+          if (font.importUrl) {
+            webFontFamilies.push(font.cssValue);
+            webFontUrls.push(font.importUrl);
           }
-        }
+        });
 
         if (window.WebFont) {
           window.WebFont.load({
@@ -177,12 +173,10 @@
             // 왠지 모르겠는데 x랑 y가 묘하게 어긋남...보정하자..
             const texts = cut.text.split('\n');
             currentCutY = cut.y + this.selectedFontSize;
-            console.log(`currentCutY: ${currentCutY}`);
 
             texts.forEach((text) => {
               context.fillText(text, cut.x + 2, currentCutY);
               currentCutY += lineHeight;
-              console.log(`next rendering y: ${currentCutY}`);
             });
           }
         });
@@ -196,7 +190,6 @@
     },
     watch: {
       [routeChange](newId) {
-        console.log('test');
         const source = sources.find(s =>
           s.id === parseInt(newId, 10)
         );
