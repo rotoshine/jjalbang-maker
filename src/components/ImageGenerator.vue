@@ -39,7 +39,7 @@
                   placeholder="대사를 입력하세요."></textarea>
       </div>
     </div>
-    <div class="row">
+    <div class="row" v-if="resultCanvas != null">
       <canvas id="result"></canvas>
     </div>
   </div>
@@ -63,6 +63,7 @@
       );
 
       const data = {
+        resultCanvas: null,
         backgroundImage: null,
         selectedFont: fonts[0],
         selectedFontSize: fontSizes[0],
@@ -116,7 +117,6 @@
           canvas.height = this.source.height;
 
           const context = canvas.getContext('2d');
-          console.log('image draw');
           context.drawImage(this.backgroundImage, 0, 0);
         });
 
@@ -129,7 +129,9 @@
         canvas.height = this.source.height;
 
         const context = canvas.getContext('2d');
-        context.clearRext(0, 0, canvas.width, canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        this.resultCanvas = null;
       },
       getStyle(cut) {
         return {
@@ -153,6 +155,7 @@
       generate() {
         const source = this.source;
         const canvas = document.getElementById('result');
+        this.resultCanvas = canvas;
         canvas.width = source.width;
         canvas.height = source.height;
 
@@ -187,6 +190,11 @@
           }
         });
 
+        // watermark 찍기
+        context.lineWidth = 1;
+        context.font = '16px 나눔고딕';
+        context.fillText('@winterwolf0412', source.width - 125, source.height - 12);
+
         const result = canvas.toDataURL('image/png');
 
         $('#generate-image')
@@ -196,7 +204,6 @@
     },
     watch: {
       [routeChange](newId) {
-        console.log('test');
         const source = sources.find(s =>
           s.id === parseInt(newId, 10)
         );
