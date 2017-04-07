@@ -39,7 +39,7 @@
                   placeholder="대사를 입력하세요."></textarea>
       </div>
     </div>
-    <div class="row" v-bind:style="resultCanvas != null">
+    <div class="row">
       <canvas id="result"></canvas>
     </div>
   </div>
