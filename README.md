@@ -2,16 +2,15 @@
 
 ## 실행
 ```
+## vue-cli 
+npm install -g vue-cli
 git clone https://github.com/rotoshine/jjalbang-maker.git
 cd jjalbang-maker
-npm install && bower install
-node app.js
+npm install
+npm run dev
 ```
 
-## js build
-browserify로 js가 작성이 되어있기 때문에, js build는 아래와 같이 한다.
-
+## build
 ```
-npm install -g browserify
-npm build
+npm run build
 ```
