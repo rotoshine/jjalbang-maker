@@ -110,7 +110,7 @@ const sources = [
   {
     id: 3,
     name: '도라에몽',
-    imageUrl: '/static/images/도라에몽.jpg',
+    imageUrl: '/static/images/doraemong.jpg',
     width: 700,
     height: 498,
     cuts: [
@@ -152,7 +152,7 @@ const sources = [
   {
     id: 5,
     name: '이게 ~도 없는게',
-    imageUrl: '/static/images/이게.jpg',
+    imageUrl: '/static/images/paedrip.jpg',
     cuts: [
       {
         x: 112.5,
@@ -179,7 +179,7 @@ const sources = [
   {
     id: 6,
     name: 'Civil War',
-    imageUrl: '/static/images/시빌워.jpg',
+    imageUrl: '/static/images/civilwar.jpg',
     fontColor: '#FFFFFF',
     cutBackgroundColor: '#000000',
     cuts: [
@@ -202,7 +202,7 @@ const sources = [
   {
     id: 7,
     name: '울지마라',
-    imageUrl: '/static/images/울지마라.jpg',
+    imageUrl: '/static/images/dontcry.jpg',
     cuts: [
       {
         x: 326.5,
