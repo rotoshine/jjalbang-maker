@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "serve": "npm run build && node app.js"
   },
   "repository": {
     "type": "git",
