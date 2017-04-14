@@ -194,6 +194,16 @@
         $('#generate-image')
           .attr('download', '짤생성_결과.png')
           .attr('href', result);
+
+        this.save();
+      },
+      save() {
+        const { firebase } = window;
+        const { source } = this;
+        firebase.database().ref().push({
+          id: source.id,
+          cuts: source.cuts
+        });
       }
     },
     watch: {
