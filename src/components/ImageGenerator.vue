@@ -46,6 +46,7 @@
 </template>
 <script>
   import $ from 'jquery';
+  import _ from 'lodash';
   import sources from '../assets/sources';
   import fonts from '../assets/fonts';
   import fontSizes from '../assets/fontSizes';
@@ -198,12 +199,19 @@
         this.save();
       },
       save() {
+        // 모든 cut 데이터가 유효한 경우에만 저장
         const { firebase } = window;
         const { source } = this;
-        firebase.database().ref().push({
-          id: source.id,
-          cuts: source.cuts
-        });
+        const { cuts } = source;
+
+        if (cuts.every(cut => !_.isEmpty(cut.text))) {
+          firebase.database().ref(`jjal/${source.id}`).push({
+            id: source.id,
+            cuts: source.cuts,
+            fontSize: this.selectedFontSize,
+            fontStyle: this.selectedFont.cssValue,
+          });
+        }
       }
     },
     watch: {
