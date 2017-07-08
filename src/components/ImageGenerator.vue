@@ -25,6 +25,14 @@
           </option>
         </select>
       </span>
+      <span>
+        <label for="font-align">글꼴 정렬</label>
+        <select id="font-align" v-model="selectedTextAlign" v-on:change="applytextAlign(selectedTextAlign)">
+          <option value="left">좌</option>
+          <option value="right">우</option>
+          <option value="center">중앙</option>
+        </select>
+      </span>
       <span class="buttons">
         <a id="generate-image" class="btn btn-primary" href="#" v-on:click="generate()">생성</a>
       </span>
@@ -57,6 +65,7 @@
     mounted() {
       this.drawImageToCanvas();
       this.loadWebFonts();
+      this.initCutsStyles();
     },
     data() {
       const source = sources.find(s =>
@@ -66,7 +75,8 @@
       return {
         backgroundImage: null,
         selectedFont: fonts[0],
-        selectedFontSize: fontSizes[0],
+        selectedFontSize: source.defaultFontSize ? source.defaultFontSize : fontSizes[0],
+        selectedTextAlign: source.defaultTextAlign ? source.defaultTextAlign : 'left',
         source,
         fonts,
         fontSizes,
@@ -149,6 +159,20 @@
       applyFont(font) {
         this.applyCutStyle('font-family', font.cssValue);
       },
+      applytextAlign(textAlign) {
+        this.applyCutStyle('text-align', textAlign);
+      },
+      initCutsStyles() {
+        this.applyFont(this.selectedFont);
+        this.applyFontSize(this.selectedFontSize);
+        this.applytextAlign(this.selectedTextAlign);
+      },
+      applyDefaultStyles() {
+        this.selectedFontSize = this.source.defaultFontSize ?
+          this.source.defaultFontSize : fontSizes[0];
+        this.selectedTextAlign = this.source.defaultTextAlign ?
+          this.source.defaultTextAlign : 'left';
+      },
       generate() {
         const source = this.source;
         const canvas = document.getElementById('result');
@@ -172,14 +196,21 @@
 
         const cuts = source.cuts;
 
+        context.textAlign = this.selectedTextAlign;
+
         cuts.forEach((cut) => {
           if (cut.text !== undefined && typeof cut.text === 'string') {
             // 왠지 모르겠는데 x랑 y가 묘하게 어긋남...보정하자..
             const texts = cut.text.split('\n');
             currentCutY = cut.y + this.selectedFontSize;
 
+            let cutX = cut.x;
+            if (this.selectedTextAlign === 'center') {
+              const centerPosition = cut.width / 2;
+              cutX += centerPosition;
+            }
             texts.forEach((text) => {
-              context.fillText(text, cut.x + 2, currentCutY);
+              context.fillText(text, cutX + 2, currentCutY);
               currentCutY += lineHeight;
             });
           }
@@ -221,8 +252,9 @@
         );
 
         this.source = source;
-
         this.drawImageToCanvas();
+        this.applyDefaultStyles();
+        this.initCutsStyles();
       }
     }
   };

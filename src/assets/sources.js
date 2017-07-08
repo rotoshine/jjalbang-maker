@@ -182,6 +182,8 @@ const sources = [
     imageUrl: '/static/images/civilwar.jpg',
     fontColor: '#FFFFFF',
     cutBackgroundColor: '#000000',
+    defaultFontSize: 14,
+    defaultTextAlign: 'center',
     cuts: [
       {
         x: 80.5,
@@ -246,18 +248,20 @@ const sources = [
   },
   {
     id: 10,
-    name: '아껴써야한다고 이x끼야!',
+    name: '아껴써야한다고 이새X야!',
     imageUrl: '/static/images/10.png',
+    defaultFontSize: 40,
+    defaultTextAlign: 'center',
     cuts: [
       {
         x: 184,
-        y: 463,
+        y: 470,
         width: 731,
         height: 59
       },
       {
         x: 241,
-        y: 1035,
+        y: 1038,
         width: 629,
         height: 50
       }
