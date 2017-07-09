@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>짤방생성기</title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="firebaseui-auth-container"></div>
+<div id="app"></div>
+<script type="application/javascript" src="//ajax.googleapis.com/ajax/libs/webfont/1.4.10/webfont.js"></script>
+<script type="application/javascript" src="//www.gstatic.com/firebasejs/3.7.5/firebase.js"></script>
+<script type="application/javascript">
+  // Initialize Firebase
+  const config = {
+    apiKey: "<%= htmlWebpackPlugin.options.firebaseConfig.apiKey %>",
+    authDomain: "<%= htmlWebpackPlugin.options.firebaseConfig.authDomain %>",
+    databaseURL: "<%= htmlWebpackPlugin.options.firebaseConfig.databaseURL %>",
+    projectId: "<%= htmlWebpackPlugin.options.firebaseConfig.projectId %>",
+    storageBucket: "<%= htmlWebpackPlugin.options.firebaseConfig.storageBucket %>",
+    messagingSenderId: "<%= htmlWebpackPlugin.options.firebaseConfig.messagingSenderId %>"
+  };
+  window.firebase.initializeApp(config);
+</script>
+<!-- built files will be auto injected -->
+</body>
+</html>

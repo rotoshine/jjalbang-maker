@@ -63,9 +63,8 @@
 
   export default {
     mounted() {
-      this.drawImageToCanvas();
       this.loadWebFonts();
-      this.initCutsStyles();
+      this.initialize();
     },
     data() {
       const source = sources.find(s =>
@@ -92,6 +91,12 @@
       };
     },
     methods: {
+      initialize() {
+        this.drawSourceImageToCanvas();
+        this.applyDefaultStyles();
+        this.initCutsStyles();
+        this.loadFromFirebase();
+      },
       loadWebFonts() {
         const webFontFamilies = [];
         const webFontUrls = [];
@@ -114,7 +119,7 @@
           throw new Error('WebFont lib not loaded!');
         }
       },
-      drawImageToCanvas() {
+      drawSourceImageToCanvas() {
         this.backgroundImage = new Image();
         this.backgroundImage.src = this.source.imageUrl;
 
@@ -227,7 +232,15 @@
           .attr('download', '짤생성_결과.png')
           .attr('href', result);
 
-        this.save();
+        if (this.$parent.isLogin) {
+          this.save();
+        }
+      },
+      loadFromFirebase() {
+        const { firebase } = window;
+        firebase.database().ref(`jjal/${this.source.id}`).once('value', (snapshot) => {
+          console.log(snapshot.val());
+        });
       },
       save() {
         // 모든 cut 데이터가 유효한 경우에만 저장
@@ -236,11 +249,24 @@
         const { cuts } = source;
 
         if (cuts.every(cut => !_.isEmpty(cut.text))) {
-          firebase.database().ref(`jjal/${source.id}`).push({
+          const dbRef = firebase.database().ref(`jjal/${source.id}`);
+          dbRef.push({
             id: source.id,
             cuts: source.cuts,
             fontSize: this.selectedFontSize,
             fontStyle: this.selectedFont.cssValue,
+            textAlign: this.selectedTextAlign,
+            createdAt: new Date().getTime()
+          }).then((snapshot) => {
+            const fileName = snapshot.key;
+            const storageRef = firebase.storage().ref();
+            document.getElementById('result').toBlob((blob) => {
+              storageRef.child(`result/${fileName}`).put(blob, {
+                sourceId: source.id
+              }).then(() => {
+                console.log('upload complete!');
+              });
+            });
           });
         }
       }
@@ -252,9 +278,7 @@
         );
 
         this.source = source;
-        this.drawImageToCanvas();
-        this.applyDefaultStyles();
-        this.initCutsStyles();
+        this.initialize();
       }
     }
   };

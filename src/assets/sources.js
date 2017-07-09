@@ -153,6 +153,7 @@ const sources = [
     id: 5,
     name: '이게 ~도 없는게',
     imageUrl: '/static/images/paedrip.jpg',
+    defaultTextAlign: 'center',
     cuts: [
       {
         x: 112.5,

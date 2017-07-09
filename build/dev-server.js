@@ -48,8 +48,6 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
-// handle fallback for HTML5 history API
-app.use(require('connect-history-api-fallback')())
 
 // serve webpack bundle output
 app.use(devMiddleware)
@@ -79,7 +77,6 @@ devMiddleware.waitUntilValid(() => {
   _resolve()
 })
 
-var server = app.listen(port)
 
 module.exports = {
   ready: readyPromise,
@@ -87,3 +84,5 @@ module.exports = {
     server.close()
   }
 }
+
+module.exports = app;
