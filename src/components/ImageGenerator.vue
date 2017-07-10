@@ -34,32 +34,34 @@
         </select>
       </span>
     </div>
-    <div class="row">
-      <a class="generate-image btn btn-primary btn-lg" v-on:click="generate($event)">생성</a>
-    </div>
-    <div class="row" v-if="$parent.isLogin">
-      <div class="well">
-        이미지 생성 후 이곳에 공유 url이 만들어집니다.
-        <div v-if="!isNowUploading && isUploadComplete">
-          이미지 공유 url: <a v-bind:href="resultUrl" target="_blank">{{resultUrl}}</a>
-        </div>
-        <div v-else-if="isNowUploading && !isUploadComplete">
-          <i class="fa fa-spinner fa-pulse"></i> 이미지 공유 url을 생성 중입니다..
+    <div class="canvas-container">
+      <div class="row">
+        <a class="generate-image btn btn-primary btn-lg" v-on:click="generate($event)">생성</a>
+      </div>
+      <div class="row" v-if="$parent.isLogin">
+        <div class="well upload-info">
+          이미지 생성 후 이곳에 공유 url이 만들어집니다.
+          <div v-if="!isNowUploading && isUploadComplete">
+            이미지 공유 url: <a v-bind:href="resultUrl" target="_blank">{{resultUrl}}</a>
+          </div>
+          <div v-else-if="isNowUploading && !isUploadComplete">
+            <i class="fa fa-spinner fa-pulse"></i> 이미지 공유 url을 생성 중입니다..
+          </div>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="edit-layer" v-bind:style="editLayerStyle">
-        <canvas id="background"></canvas>
-        <textarea v-for="cut in source.cuts"
-                  v-bind:style="getStyle(cut)"
-                  v-model="cut.text"
-                  class="cut"
-                  placeholder="대사를 입력하세요."></textarea>
+      <div class="row">
+        <div class="edit-layer" v-bind:style="editLayerStyle">
+          <canvas id="background"></canvas>
+          <textarea v-for="cut in source.cuts"
+                    v-bind:style="getStyle(cut)"
+                    v-model="cut.text"
+                    class="cut"
+                    placeholder="대사를 입력하세요."></textarea>
+        </div>
       </div>
-    </div>
-    <div class="row" style="display:none;">
-      <canvas id="result"></canvas>
+      <div class="row" style="display:none;">
+        <canvas id="result"></canvas>
+      </div>
     </div>
   </div>
 </template>
@@ -147,7 +149,7 @@
           const context = canvas.getContext('2d');
           context.drawImage(this.backgroundImage, 0, 0);
 
-          $('.generate-image').width(this.source.width);
+          $('.canvas-container').width(this.source.width);
         });
 
         // clear result canvas
@@ -319,6 +321,7 @@
   }
 
   .generate-image {
+    width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
   }

@@ -21,7 +21,7 @@ export default new Router({
     },
     {
       path: '/',
-      redirect: '/sources/1'
+      redirect: '/sources/10'
     },
     {
       path: '*',
