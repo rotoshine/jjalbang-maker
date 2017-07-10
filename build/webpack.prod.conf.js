@@ -51,6 +51,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       firebaseConfig: appConfig.firebaseConfig,
+      ga: appConfig.ga,
       filename: config.build.index,
       template: 'index.ejs',
       inject: true,

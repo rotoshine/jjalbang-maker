@@ -28,6 +28,7 @@ module.exports = merge(baseWebpackConfig, {
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       firebaseConfig: appConfig.firebaseConfig,
+      ga: appConfig.ga,
       filename: 'index.html',
       template: 'index.ejs',
       inject: true
