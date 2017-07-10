@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/rotoshine/jjalbang-maker",
   "dependencies": {
+    "@google-cloud/storage": "^1.2.0",
     "aws-sdk": "^2.82.0",
     "bootstrap": "^3.3.7",
     "ejs": "^2.5.6",

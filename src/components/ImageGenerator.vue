@@ -33,9 +33,20 @@
           <option value="center">중앙</option>
         </select>
       </span>
-      <span class="buttons">
-        <a id="generate-image" class="btn btn-primary" href="#" v-on:click="generate()">생성</a>
-      </span>
+    </div>
+    <div class="row">
+      <a class="generate-image btn btn-primary btn-lg" v-on:click="generate($event)">생성</a>
+    </div>
+    <div class="row" v-if="$parent.isLogin">
+      <div class="well">
+        이미지 생성 후 이곳에 공유 url이 만들어집니다.
+        <div v-if="!isNowUploading && isUploadComplete">
+          이미지 공유 url: <a v-bind:href="resultUrl" target="_blank">{{resultUrl}}</a>
+        </div>
+        <div v-else-if="isNowUploading && !isUploadComplete">
+          <i class="fa fa-spinner fa-pulse"></i> 이미지 공유 url을 생성 중입니다..
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="edit-layer" v-bind:style="editLayerStyle">
@@ -47,7 +58,7 @@
                   placeholder="대사를 입력하세요."></textarea>
       </div>
     </div>
-    <div class="row">
+    <div class="row" style="display:none;">
       <canvas id="result"></canvas>
     </div>
   </div>
@@ -87,11 +98,16 @@
         canvasStyle: {
           width: source.width,
           height: source.height
-        }
+        },
+        isUploadComplete: false,
+        isNowUploading: false,
+        resultUrl: ''
       };
     },
     methods: {
       initialize() {
+        this.isUploadComplete = false;
+        this.isNowUploading = false;
         this.drawSourceImageToCanvas();
         this.applyDefaultStyles();
         this.initCutsStyles();
@@ -130,6 +146,8 @@
 
           const context = canvas.getContext('2d');
           context.drawImage(this.backgroundImage, 0, 0);
+
+          $('.generate-image').width(this.source.width);
         });
 
         // clear result canvas
@@ -178,7 +196,7 @@
         this.selectedTextAlign = this.source.defaultTextAlign ?
           this.source.defaultTextAlign : 'left';
       },
-      generate() {
+      generate($event) {
         const source = this.source;
         const canvas = document.getElementById('result');
         this.resultCanvas = canvas;
@@ -228,10 +246,9 @@
 
         const result = canvas.toDataURL('image/png');
 
-        $('#generate-image')
+        $($event.target)
           .attr('download', '짤생성_결과.png')
           .attr('href', result);
-
         if (this.$parent.isLogin) {
           this.save();
         }
@@ -258,13 +275,18 @@
             textAlign: this.selectedTextAlign,
             createdAt: new Date().getTime()
           }).then((snapshot) => {
+            this.isNowUploading = true;
+            console.log('db update complete. file upload start...');
             const fileName = snapshot.key;
             const storageRef = firebase.storage().ref();
             document.getElementById('result').toBlob((blob) => {
-              storageRef.child(`result/${fileName}`).put(blob, {
+              storageRef.child(`result/${source.id}/${fileName}`).put(blob, {
                 sourceId: source.id
               }).then(() => {
-                console.log('upload complete!');
+                console.log('file upload complete!');
+                this.isUploadComplete = true;
+                this.isNowUploading = false;
+                this.resultUrl = `${location.href}/result/${fileName}`;
               });
             });
           });
@@ -294,5 +316,10 @@
     border: none;
     font-family: '굴림', serif;
     font-size: 12px;
+  }
+
+  .generate-image {
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 </style>

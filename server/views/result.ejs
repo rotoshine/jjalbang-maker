@@ -2,6 +2,14 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta property="og:url" content="<%= url%><%= resultUrl %>" />
+  <meta property="og:title" content="짤방 생성 결과" />
+  <meta property="og:description" content="짤방 생성 결과" />
+  <meta property="og:image" content="<%= imageUrl%>" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="<%= url%>" />
+  <meta name="twitter:creator" content="@winterwolf0412" />
+  <meta name="twitter:image" content="<%= imageUrl %>" />
   <title>짤방생성기</title>
 </head>
 <body>
@@ -9,7 +17,7 @@
   <img src="<%= imageUrl %>" alt="짤방생성 결과">
 </div>
 <div>
-  <a href="https://<%= url %>/sources/<%= sourceId %>}">짤방 만들러 가기</a>
+  <a href="<%= url %>/sources/<%= sourceId %>">짤방 만들러 가기</a>
 </div>
 </body>
 </html>
