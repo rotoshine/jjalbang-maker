@@ -318,6 +318,8 @@
     border: none;
     font-family: '굴림', serif;
     font-size: 12px;
+    overflow-y: hidden;
+    resize: none;
   }
 
   .generate-image {
