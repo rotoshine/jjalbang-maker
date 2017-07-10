@@ -287,6 +287,28 @@ const sources = [
     ],
     width: 380,
     height: 390
+  },
+  {
+    id: 12,
+    name: '널 찾아내서..',
+    imageUrl: '/static/images/12.jpg',
+    defaultAlign: 'center',
+    cuts: [
+      {
+        x: 45,
+        y: 18,
+        width: 110,
+        height: 74
+      },
+      {
+        x: 364,
+        y: 59,
+        width: 126,
+        height: 77
+      }
+    ],
+    width: 538,
+    height: 374
   }
 ];
 
