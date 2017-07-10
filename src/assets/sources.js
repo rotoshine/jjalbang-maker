@@ -271,6 +271,22 @@ const sources = [
     height: 1124,
     fontColor: '#FFFFFF',
     cutBackgroundColor: '#000000'
+  },
+  {
+    id: 11,
+    name: '이제부턴 정말 ..뿐이야',
+    imageUrl: '/static/images/11.jpg',
+    defaultTextAlign: 'center',
+    cuts: [
+      {
+        x: 35,
+        y: 32,
+        width: 107,
+        height: 89
+      }
+    ],
+    width: 380,
+    height: 390
   }
 ];
 
