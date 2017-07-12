@@ -3,6 +3,7 @@ const sources = [
     id: 10,
     name: '아껴써야한다고 이새X야!',
     imageUrl: '/static/images/10.png',
+    defaultFontCssValue: 'Hanna',
     defaultFontSize: 40,
     defaultTextAlign: 'center',
     cuts: [
@@ -309,6 +310,25 @@ const sources = [
     ],
     width: 538,
     height: 374
+  },
+  {
+    id: 13,
+    name: '일어나... ...해야지..',
+    imageUrl: '/static/images/13.jpeg',
+    defaultAlign: 'left',
+    defaultFontWeight: 'bold',
+    defaultFontSize: 18,
+    defaultFontCssValue: 'Jeju Gothic',
+    cuts: [
+      {
+        x: 351,
+        y: 444,
+        width: 52,
+        height: 70
+      }
+    ],
+    width: 468,
+    height: 732
   }
 ];
 

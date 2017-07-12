@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="image-generator">
     <div class="row">
       <ul>
         <li>생성을 눌러도 이미지 저장이 안 뜨는 경우 아래 생성된 이미지를 우클릭 - 저장하십시오.</li>
@@ -27,11 +27,15 @@
       </span>
       <span>
         <label for="font-align">글꼴 정렬</label>
-        <select id="font-align" v-model="selectedTextAlign" v-on:change="applytextAlign(selectedTextAlign)">
+        <select id="font-align" v-model="selectedTextAlign" v-on:change="applyTextAlign(selectedTextAlign)">
           <option value="left">좌</option>
           <option value="right">우</option>
           <option value="center">중앙</option>
         </select>
+      </span>
+      <span>
+        <label for="font-weight">굵게</label>
+        <input type="checkbox" id="font-weight" v-model="selectedFontWeight" v-on:change="applyFontWeight(selectedFontWeight)">
       </span>
     </div>
     <div class="canvas-container">
@@ -62,6 +66,14 @@
       <div class="row" style="display:none;">
         <canvas id="result"></canvas>
       </div>
+      <div class="row" v-if="Object.keys(currentCreatedImages).length > 0">
+        <h3>최근 생성된 이미지</h3>
+        <ul>
+          <li v-for="(image, key) in currentCreatedImages">
+            <a href="#" v-on:click="applyImage(image)">{{key}}</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -69,7 +81,7 @@
   import $ from 'jquery';
   import _ from 'lodash';
   import sources from '../assets/sources';
-  import fonts from '../assets/fonts';
+  import fonts, { findByCssValue } from '../assets/fonts';
   import fontSizes from '../assets/fontSizes';
 
   const routeChange = '$route.params.sourceId';
@@ -86,9 +98,11 @@
 
       return {
         backgroundImage: null,
-        selectedFont: fonts[0],
+        selectedFont: source.defaultFontCssValue ?
+          findByCssValue(source.defaultFontCssValue) : fonts[0],
         selectedFontSize: source.defaultFontSize ? source.defaultFontSize : fontSizes[0],
         selectedTextAlign: source.defaultTextAlign ? source.defaultTextAlign : 'left',
+        selectedFontWeight: source.defaultFontWeight === 'bold',
         source,
         fonts,
         fontSizes,
@@ -103,7 +117,8 @@
         },
         isUploadComplete: false,
         isNowUploading: false,
-        resultUrl: ''
+        resultUrl: '',
+        currentCreatedImages: {}
       };
     },
     methods: {
@@ -120,13 +135,13 @@
         const webFontUrls = [];
 
         this.fonts.forEach((font) => {
-          if (font.importUrl) {
+          if ( font.importUrl ) {
             webFontFamilies.push(font.cssValue);
             webFontUrls.push(font.importUrl);
           }
         });
 
-        if (window.WebFont) {
+        if ( window.WebFont ) {
           window.WebFont.load({
             custom: {
               families: webFontFamilies,
@@ -184,13 +199,17 @@
       applyFont(font) {
         this.applyCutStyle('font-family', font.cssValue);
       },
-      applytextAlign(textAlign) {
+      applyTextAlign(textAlign) {
         this.applyCutStyle('text-align', textAlign);
+      },
+      applyFontWeight(fontWeight) {
+        this.applyCutStyle('font-weight', fontWeight ? 'bold' : 'normal');
       },
       initCutsStyles() {
         this.applyFont(this.selectedFont);
         this.applyFontSize(this.selectedFontSize);
-        this.applytextAlign(this.selectedTextAlign);
+        this.applyTextAlign(this.selectedTextAlign);
+        this.applyFontWeight(this.selectedFontWeight);
       },
       applyDefaultStyles() {
         this.selectedFontSize = this.source.defaultFontSize ?
@@ -215,7 +234,7 @@
         context.drawImage(this.backgroundImage, 0, 0);
         context.font = `${this.selectedFontSize}px ${this.selectedFont.cssValue}`;
 
-        if (source.fontColor) {
+        if ( source.fontColor ) {
           context.fillStyle = source.fontColor;
         }
 
@@ -224,13 +243,13 @@
         context.textAlign = this.selectedTextAlign;
 
         cuts.forEach((cut) => {
-          if (cut.text !== undefined && typeof cut.text === 'string') {
+          if ( cut.text !== undefined && typeof cut.text === 'string' ) {
             // 왠지 모르겠는데 x랑 y가 묘하게 어긋남...보정하자..
             const texts = cut.text.split('\n');
             currentCutY = cut.y + this.selectedFontSize;
 
             let cutX = cut.x;
-            if (this.selectedTextAlign === 'center') {
+            if ( this.selectedTextAlign === 'center' ) {
               const centerPosition = cut.width / 2;
               cutX += centerPosition;
             }
@@ -251,15 +270,24 @@
         $($event.target)
           .attr('download', '짤생성_결과.png')
           .attr('href', result);
-        if (this.$parent.isLogin) {
+        if ( this.$parent.isLogin ) {
           this.save();
         }
       },
+      applyImage(image) {
+        this.selectedFontSize = image.fontSize;
+        this.selectedFont = findByCssValue(image.fontCssValue || image.fontStyle);
+        this.selectedTextAlign = image.textAlign;
+        this.source.cuts = image.cuts;
+      },
       loadFromFirebase() {
         const { firebase } = window;
-        firebase.database().ref(`jjal/${this.source.id}`).once('value', (snapshot) => {
-          console.log(snapshot.val());
-        });
+        firebase.database().ref(`jjal/${this.source.id}`)
+          .orderByChild('createdAt')
+          .limitToLast(10)
+          .on('value', (snapshot) => {
+            this.currentCreatedImages = snapshot.val();
+          });
       },
       save() {
         // 모든 cut 데이터가 유효한 경우에만 저장
@@ -267,13 +295,13 @@
         const { source } = this;
         const { cuts } = source;
 
-        if (cuts.every(cut => !_.isEmpty(cut.text))) {
+        if ( cuts.every(cut => !_.isEmpty(cut.text)) ) {
           const dbRef = firebase.database().ref(`jjal/${source.id}`);
           dbRef.push({
             id: source.id,
             cuts: source.cuts,
             fontSize: this.selectedFontSize,
-            fontStyle: this.selectedFont.cssValue,
+            fontCssValue: this.selectedFont.cssValue,
             textAlign: this.selectedTextAlign,
             createdAt: new Date().getTime()
           }).then((snapshot) => {
@@ -308,6 +336,10 @@
   };
 </script>
 <style>
+  .image-generator {
+    padding-top: 20px;
+  }
+
   .edit-layer {
     position: relative;
   }

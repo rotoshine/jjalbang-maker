@@ -36,7 +36,7 @@ app.get('/sources/:sourceId/result/:jjalId', (req, res) => {
       return res.render('result', {
         url: appConfig.url,
         sourceId: sourceId,
-        imageUrl: signedUrls[ 0 ],
+        imageUrl: signedUrls[0],
         resultUrl: req.url,
         jjalId: jjalId
       });
