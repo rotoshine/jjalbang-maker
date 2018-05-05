@@ -46,10 +46,18 @@
         <div class="well upload-info">
           이미지 생성 후 이곳에 공유 url이 만들어집니다.
           <div v-if="!isNowUploading && isUploadComplete">
-            이미지 공유 url: <a v-bind:href="resultUrl" target="_blank">{{resultUrl}}</a>
+            <div>
+              이미지 공유 url: <a v-bind:href="resultUrl" target="_blank">{{resultUrl}}</a>
+            </div>
+            <div>
+              <a class="btn btn-primary"
+                  target="_blank"
+                  v-bind:href="twitterShareText"
+                  data-size="large"><i class="fa fa-twitter" /> 트위터에 공유하기</a>
+            </div>
           </div>
           <div v-else-if="isNowUploading && !isUploadComplete">
-            <i class="fa fa-spinner fa-pulse"></i> 이미지 공유 url을 생성 중입니다..
+            <i class="fa fa-spinner fa-pulse"></i> 이미지 공유 url을 생성 중입니드..
           </div>
         </div>
       </div>
@@ -118,6 +126,7 @@
         isUploadComplete: false,
         isNowUploading: false,
         resultUrl: '',
+        twitterShareText: null,
         currentCreatedImages: {}
       };
     },
@@ -268,7 +277,7 @@
         const result = canvas.toDataURL('image/png');
 
         $($event.target)
-          .attr('download', '짤생성_결과.png')
+          .attr('download', `${this.source.name}-${new Date().getTime()}.png`)
           .attr('href', result);
         if ( this.$parent.isLogin ) {
           this.save();
@@ -290,6 +299,9 @@
           });
       },
       save() {
+        this.resultUrl = '';
+        this.twitterShareText = '';
+
         // 모든 cut 데이터가 유효한 경우에만 저장
         const { firebase } = window;
         const { source } = this;
@@ -317,6 +329,14 @@
                 this.isUploadComplete = true;
                 this.isNowUploading = false;
                 this.resultUrl = `${location.href}/result/${fileName}`;
+
+                const twitterIntentUrl = 'https://twitter.com/intent/tweet';
+                const twitteIntentParams = [
+                  `text=${this.$parent.displayName}님이 만든 짤방입니다. ${this.resultUrl}`,
+                  'via=winterwolf0412'
+                ];
+
+                this.twitterShareText = `${twitterIntentUrl}?${twitteIntentParams.join('&')}`;
               });
             });
           });
