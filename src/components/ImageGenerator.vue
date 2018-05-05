@@ -57,7 +57,7 @@
             </div>
           </div>
           <div v-else-if="isNowUploading && !isUploadComplete">
-            <i class="fa fa-spinner fa-pulse"></i> 이미지 공유 url을 생성 중입니드..
+            <i class="fa fa-spinner fa-pulse"></i> 이미지 공유 url을 생성 중입니다..
           </div>
         </div>
       </div>
