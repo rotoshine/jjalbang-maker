@@ -298,7 +298,7 @@
             this.currentCreatedImages = snapshot.val();
           });
       },
-      save() {
+      async save() {
         this.resultUrl = '';
         this.twitterShareText = '';
 
@@ -316,31 +316,35 @@
             fontCssValue: this.selectedFont.cssValue,
             textAlign: this.selectedTextAlign,
             createdAt: new Date().getTime()
-          }).then((snapshot) => {
+          }).then(async (snapshot) => {
             this.isNowUploading = true;
             console.log('db update complete. file upload start...');
             const fileName = snapshot.key;
-            const storageRef = firebase.storage().ref();
-            document.getElementById('result').toBlob((blob) => {
-              storageRef.child(`result/${source.id}/${fileName}`).put(blob, {
-                sourceId: source.id
-              }).then(() => {
-                console.log('file upload complete!');
-                this.isUploadComplete = true;
-                this.isNowUploading = false;
-                this.resultUrl = `${location.href}/result/${fileName}`;
 
-                const twitterIntentUrl = 'https://twitter.com/intent/tweet';
-                const twitteIntentParams = [
-                  `text=${this.$parent.displayName}님이 만든 짤방입니다. ${this.resultUrl}`,
-                  'via=winterwolf0412'
-                ];
-
-                this.twitterShareText = `${twitterIntentUrl}?${twitteIntentParams.join('&')}`;
-              });
-            });
+            await this.uploadStorage(source.id, fileName)
+            this.updateTwitterShareUrl()
           });
         }
+      },
+      async uploadStorage(sourceId, fileName) {
+        const { firebase } = window;
+        const storageRef = firebase.storage().ref();
+        document.getElementById('result').toBlob(async (blob) => {
+          await storageRef.child(`result/${sourceId}/${fileName}`).put(blob, { sourceId })
+          console.log('file upload complete!');
+          this.isUploadComplete = true;
+          this.isNowUploading = false;
+          this.resultUrl = `${location.href}/result/${fileName}`;
+        })
+      },
+      updateTwitterShareUrl() {
+        const twitterIntentUrl = 'https://twitter.com/intent/tweet';
+        const twitteIntentParams = [
+          `text=${this.$parent.displayName}님이 만든 짤방입니다. ${this.resultUrl}`,
+          'via=winterwolf0412'
+        ];
+
+        this.twitterShareText = `${twitterIntentUrl}?${twitteIntentParams.join('&')}`;
       }
     },
     watch: {
