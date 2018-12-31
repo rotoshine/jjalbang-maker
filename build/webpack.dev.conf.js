@@ -30,7 +30,7 @@ module.exports = merge(baseWebpackConfig, {
       firebaseConfig: appConfig.firebaseConfig,
       ga: appConfig.ga,
       filename: 'index.html',
-      template: 'index.ejs',
+      template: './server/views/index.ejs',
       inject: true
     }),
     new FriendlyErrorsPlugin()

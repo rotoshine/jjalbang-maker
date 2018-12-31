@@ -39,8 +39,16 @@
       </span>
     </div>
     <div class="canvas-container">
-      <div class="row">
-        <a class="generate-image btn btn-primary btn-lg" v-on:click="generate($event)">생성</a>
+      <div class="row" v-if="!$parent.isLogin">        
+        <a class="generate-image btn btn-primary btn-lg" v-on:click="generate($event)">생성 및 다운로드</a>
+      </div>
+      <div class="row" v-if="$parent.isLogin">
+        <div class="col-xs-6">
+          <a class="generate-image btn btn-primary btn-lg" v-on:click="generate($event)">생성 및 다운로드</a>
+        </div>
+        <div class="col-xs-6">
+          <a class="generate-image btn btn-primary btn-lg" v-on:click="generate($event, false)">공유 URL 만들기</a>
+        </div>
       </div>
       <div class="row" v-if="$parent.isLogin">
         <div class="well upload-info">
@@ -226,7 +234,7 @@
         this.selectedTextAlign = this.source.defaultTextAlign ?
           this.source.defaultTextAlign : 'left';
       },
-      generate($event) {
+      generate($event, isDownload = true) {
         const source = this.source;
         const canvas = document.getElementById('result');
         this.resultCanvas = canvas;
@@ -276,10 +284,13 @@
 
         const result = canvas.toDataURL('image/png');
 
-        $($event.target)
-          .attr('download', `${this.source.name}-${new Date().getTime()}.png`)
-          .attr('href', result);
-        if ( this.$parent.isLogin ) {
+        if (isDownload) {
+          $($event.target)
+            .attr('download', `${this.source.name}-${new Date().getTime()}.png`)
+            .attr('href', result);
+        }
+
+        if (this.$parent.isLogin) {
           this.save();
         }
       },
@@ -298,7 +309,7 @@
             this.currentCreatedImages = snapshot.val();
           });
       },
-      save() {
+      async save() {
         this.resultUrl = '';
         this.twitterShareText = '';
 
@@ -316,31 +327,42 @@
             fontCssValue: this.selectedFont.cssValue,
             textAlign: this.selectedTextAlign,
             createdAt: new Date().getTime()
-          }).then((snapshot) => {
+          }).then(async (snapshot) => {
             this.isNowUploading = true;
             console.log('db update complete. file upload start...');
             const fileName = snapshot.key;
-            const storageRef = firebase.storage().ref();
-            document.getElementById('result').toBlob((blob) => {
-              storageRef.child(`result/${source.id}/${fileName}`).put(blob, {
-                sourceId: source.id
-              }).then(() => {
-                console.log('file upload complete!');
-                this.isUploadComplete = true;
-                this.isNowUploading = false;
-                this.resultUrl = `${location.href}/result/${fileName}`;
 
-                const twitterIntentUrl = 'https://twitter.com/intent/tweet';
-                const twitteIntentParams = [
-                  `text=${this.$parent.displayName}님이 만든 짤방입니다. ${this.resultUrl}`,
-                  'via=winterwolf0412'
-                ];
-
-                this.twitterShareText = `${twitterIntentUrl}?${twitteIntentParams.join('&')}`;
-              });
-            });
+            await this.uploadStorage(source.id, fileName)
+            this.updateTwitterShareUrl()
           });
         }
+      },
+      async uploadStorage(sourceId, fileName) {
+        const { firebase } = window;
+        const storageRef = firebase.storage().ref();
+
+        return new Promise((resolve) => {
+          document.getElementById('result').toBlob(async (blob) => {
+            await storageRef.child(`result/${sourceId}/${fileName}`).put(blob, { sourceId })
+            console.log('file upload complete!');
+            this.isUploadComplete = true;
+            this.isNowUploading = false;
+            this.resultUrl = `${location.href}/result/${fileName}`;
+
+            console.log(this.resultUrl)
+            resolve()
+          })
+        })
+      },
+      updateTwitterShareUrl() {
+        const twitterIntentUrl = 'https://twitter.com/intent/tweet';
+        const twitteIntentParams = [
+          `text=${this.$parent.displayName}님이 만든 짤방입니다. ${this.resultUrl}`,
+          'via=winterwolf0412'
+        ];
+        console.log(this.$parent)
+
+        this.twitterShareText = `${twitterIntentUrl}?${twitteIntentParams.join('&')}`;
       }
     },
     watch: {
