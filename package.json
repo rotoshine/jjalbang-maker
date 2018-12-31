@@ -26,6 +26,7 @@
     "bootstrap": "^3.3.7",
     "ejs": "^2.5.6",
     "express": "^4.14.1",
+    "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "vue": "^2.3.4",
@@ -34,8 +35,8 @@
     "vue-template-compiler": "^2.3.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
     "autoprefixer": "^6.7.2",
-    "babel-core": "^6.26.3",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-runtime": "^6.22.0",
