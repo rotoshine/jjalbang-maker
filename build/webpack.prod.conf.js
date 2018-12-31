@@ -53,7 +53,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       firebaseConfig: appConfig.firebaseConfig,
       ga: appConfig.ga,
       filename: config.build.index,
-      template: 'index.ejs',
+      template: './server/views/index.ejs',
       inject: true,
       minify: {
         removeComments: true,
