@@ -11,6 +11,7 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 const env = config.build.env
 const appConfig = require('../config/appConfig');
+
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -52,6 +53,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       firebaseConfig: appConfig.firebaseConfig,
       ga: appConfig.ga,
+      googleAdClientKey: appConfig.googleAdClientKey,
       filename: config.build.index,
       template: './server/views/index.ejs',
       inject: true,

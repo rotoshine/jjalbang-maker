@@ -55,9 +55,11 @@
 </template>
 
 <script>
-  import 'bootstrap/dist/css/bootstrap.min.css';
-  import $ from 'jquery';
-  import sources from './assets/sources';
+  import 'bootstrap/dist/css/bootstrap.min.css'
+  import 'font-awesome/css/font-awesome.min.css'
+  
+  import $ from 'jquery'
+  import sources from './assets/sources'
 
   const { firebase } = window;
   export default {
@@ -68,13 +70,13 @@
         isLoginCheckComplete: false,
         isLogin: false,
         displayName: null
-      };
+      }
     },
     mounted() {
       this.loadCurrentUser();
       firebase.auth().getRedirectResult().then(() => {
         this.loadCurrentUser();
-      });
+      })
     },
     methods: {
       loadCurrentUser() {
