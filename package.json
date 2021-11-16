@@ -22,7 +22,7 @@
   "homepage": "https://github.com/rotoshine/jjalbang-maker",
   "dependencies": {
     "@google-cloud/storage": "^2.3.4",
-    "aws-sdk": "^2.82.0",
+    "aws-sdk": "^2.814.0",
     "bootstrap": "^3.3.7",
     "ejs": "^2.5.6",
     "express": "^4.14.1",
